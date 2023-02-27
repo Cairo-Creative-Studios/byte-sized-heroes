@@ -12,11 +12,6 @@ namespace BSH
         
         void Update()
         {
-			if (paused) return;
-            foreach (var instance in Objects)
-            {
-                instance.GetComponent<CharacterControllerComponent>().Update();
-            }
         }
         
         public StandardObject CreateCharacter(string name)
