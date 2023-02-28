@@ -18,7 +18,7 @@ namespace BSH
 
         public class Title : State<BSHRuntime>
         {
-            public void OnEnter()
+            public override void Enter()
             {
                 SetState("Play");
             }
@@ -33,12 +33,13 @@ namespace BSH
             public override void Enter()
             {
                 //Start Game Systems
-                //_cameraSystem = System<CameraSystem>.StartSystem().BaseInstance;
-                //_characterSystem = System<CharacterSystem>.StartSystem(managedObjectType: "Character").BaseInstance;
+                _cameraSystem = System<CameraSystem>.StartSystem().BaseInstance;
+                _characterSystem = System<CharacterSystem>.StartSystem(managedObjectType: "Character").BaseInstance;
                 
                 //Create Player
-                //_player = _characterSystem.CreateCharacter("Player");
+                _player = _characterSystem.CreateCharacter("Player");
                 //_characterSystem._player = _player;
+                Debug.Log("Fuck");
             }
             
             public override void Exit()

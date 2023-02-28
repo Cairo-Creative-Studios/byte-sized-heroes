@@ -18,6 +18,7 @@ namespace BSH
         {
             var character = ObjectModule.CreateInstanceFromData(name);
             character.AddIComponent<CharacterControllerComponent>();
+            _player = character;
             return character;
         }
 

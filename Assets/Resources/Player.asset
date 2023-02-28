@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50a822ed533b40e59c88f0385cc496b9, type: 3}
+  m_Name: Player
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 0}
+  ComponentData:
+  - {fileID: 11400000, guid: 5a949301bacd973fe9b85eddf8ca7578, type: 2}
+  SubscribedSystems: []
+  SelectedSystem: BSH.CharacterSystem, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+    PublicKeyToken=null
