@@ -13,7 +13,7 @@ namespace BSH
         {
             name = "BSH Runtime";
             
-            //_playerController = new PlayerController();
+            _playerController = new PlayerController();
         }
 
         public class Title : State<BSHRuntime>
@@ -39,7 +39,6 @@ namespace BSH
                 //Create Player
                 _player = _characterSystem.CreateCharacter("Player");
                 //_characterSystem._player = _player;
-                Debug.Log("Fuck");
             }
             
             public override void Exit()

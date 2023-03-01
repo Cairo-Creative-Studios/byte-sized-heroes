@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50a822ed533b40e59c88f0385cc496b9, type: 3}
   m_Name: Player
   m_EditorClassIdentifier: 
-  prefab: {fileID: 0}
+  prefab: {fileID: 8015061294841526121, guid: 8179462c6a48d4fb588208e381618780, type: 3}
   ComponentData:
   - {fileID: 11400000, guid: 5a949301bacd973fe9b85eddf8ca7578, type: 2}
   SubscribedSystems: []

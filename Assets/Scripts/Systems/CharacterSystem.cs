@@ -10,15 +10,10 @@ namespace BSH
         public SideViewCameraComponent _playerCamera;
 		bool paused = false;
         
-        void Update()
-        {
-        }
-        
         public StandardObject CreateCharacter(string name)
         {
             var character = ObjectModule.CreateInstanceFromData(name);
-            character.AddIComponent<CharacterControllerComponent>();
-            _player = character;
+            character.AddComponent<CharacterControllerComponent>();
             return character;
         }
 

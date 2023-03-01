@@ -62,5 +62,10 @@ namespace BSH.Characters
         [ShowIf("wallClimbType", WallClimbType.Slide)]
         [Tooltip("The Speed at which the Character will slide down the wall")]
         public float wallSlideSpeed = 1f;
+
+        public override string GetAttachedGOPath()
+        {
+            return "Character";
+        }
     }
 }

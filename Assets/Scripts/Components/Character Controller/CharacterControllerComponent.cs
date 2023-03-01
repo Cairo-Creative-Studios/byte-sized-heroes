@@ -26,10 +26,11 @@ namespace BSH.Characters
             Idle, Run, Sprint, Jumping, Falling
         }
         [ReadOnly(true)] public MovingState movingState;
-        public Vector2 velocity;
+        public Vector3 velocity;
         
         private float jumpTime;
         private bool grounded;
+        bool enableGravity = true;
 
         public override void OnInstantiate()
         {
@@ -40,12 +41,39 @@ namespace BSH.Characters
         {
             StateMachineModule.AddStateMachine(this);
         }
-
         
         void Update()
         {
-            if(movingState == MovingState.Jumping) velocity.y = Data.JumpCurve.Evaluate(jumpTime) * Data.jumpStrength;
+            //Check if the Character is grounded
+            RaycastHit hit;
+            grounded = Physics.Raycast(transform.position, Physics.gravity.normalized, out hit, _characterController.height / 2 + 0.1f);
             
+            //Set the Moving State based on the grounded state
+            if (grounded)
+            {
+                if (movingState == MovingState.Falling || movingState == MovingState.Jumping)
+                {
+                    OnLand();
+                }
+            }
+            else
+            {
+                if (movingState == MovingState.Idle || movingState == MovingState.Run || movingState == MovingState.Sprint)
+                {
+                    movingState = MovingState.Falling;
+                }
+            }
+            
+            //Apply Jump Curve
+            if(movingState == MovingState.Jumping) velocity.y = Data.JumpCurve.Evaluate(jumpTime) * Data.jumpStrength;
+            jumpTime += Time.deltaTime;
+            
+            //Apply Gravity
+            if (enableGravity && !grounded) velocity += Physics.gravity;
+            else velocity.y = 0;
+            
+            //Move the Character
+            _characterController.Move(velocity * Time.deltaTime);
         }
 
         public virtual void OnMove(InputAction.CallbackContext context)
