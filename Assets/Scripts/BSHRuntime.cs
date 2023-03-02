@@ -12,8 +12,8 @@ namespace BSH
         public override void Init()
         {
             name = "BSH Runtime";
-            
-            _playerController = new PlayerController();
+
+            _playerController = ControllerModule.CreatePlayerController("Player Controller");
         }
 
         public class Title : State<BSHRuntime>
@@ -33,11 +33,14 @@ namespace BSH
             public override void Enter()
             {
                 //Start Game Systems
-                _cameraSystem = System<CameraSystem>.StartSystem().BaseInstance;
-                _characterSystem = System<CharacterSystem>.StartSystem(managedObjectType: "Character").BaseInstance;
+                _characterSystem = System<CharacterSystem>.StartSystem();
+                _cameraSystem = System<CameraSystem>.StartSystem();
+                
+                Debug.Log(_characterSystem);
+                Debug.Log(_cameraSystem);
                 
                 //Create Player
-                _player = _characterSystem.CreateCharacter("Player");
+                //_player = _characterSystem.CreateCharacter("Player");
                 //_characterSystem._player = _player;
             }
             
