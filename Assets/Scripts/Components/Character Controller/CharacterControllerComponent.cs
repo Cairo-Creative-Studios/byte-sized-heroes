@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using UDT.Attributes;
 using UDT.Core;
 using UDT.Core.Controllables;
 using UDT.Data;
@@ -8,13 +9,8 @@ using UnityEngine.InputSystem;
 namespace BSH.Characters
 {
     [RequireComponent(typeof(CharacterController))]
-    public class CharacterControllerComponent : StandardComponent<CharacterControllerData, CharacterSystem>, IComponentControllable, IFSM
+    public class CharacterControllerComponent : ControllableComponent<CharacterControllerData, CharacterSystem>, IFSM
     {
-        //Inherited from IComponentControllable
-        public byte inputByte { get; set; }
-        public bool isPossessed { get; set; }
-        public Controller Controller { get; set; }
-        public SerializableDictionary<string, string> InputsToMethodsMap { get; set; }
         //Inherited from IFSM
         public Tree<IStateNode> states { get; set; }
         
@@ -34,6 +30,7 @@ namespace BSH.Characters
 
         public override void OnInstantiate()
         {
+            base.OnInstantiate();
             InitMachine();
             _characterController = GetComponent<CharacterController>();
         }
@@ -76,18 +73,21 @@ namespace BSH.Characters
             _characterController.Move(velocity * Time.deltaTime);
         }
 
+        [InputMethod("OnMove")]
         public virtual void OnMove(InputAction.CallbackContext context)
         {
             Vector2 input = context.ReadValue<Vector2>();
             velocity.x = input.x * Data.groundSpeed;
         }
         
+        [InputMethod("OnJump")]
         public virtual void OnJump(InputAction.CallbackContext context)
         {
             if(grounded && context.ReadValue<bool>() && movingState != MovingState.Jumping)
                 movingState = MovingState.Jumping;
         }
 
+        [InputMethod("OnLand")]
         public virtual void OnLand()
         {
             if(movingState == MovingState.Jumping || movingState == MovingState.Falling)

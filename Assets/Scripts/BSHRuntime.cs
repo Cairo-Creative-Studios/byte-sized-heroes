@@ -1,25 +1,23 @@
 using UDT.Core;
 using UDT.Core.Controllables;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace BSH
 {
     public class BSHRuntime : Runtime<BSHRuntime>
     {
-        public PlayerController _playerController;
+        public PlayerController playerController;
 
         public override void Init()
         {
             name = "BSH Runtime";
-
-            _playerController = ControllerModule.CreatePlayerController("Player Controller");
         }
 
         public class Title : State<BSHRuntime>
         {
             public override void Enter()
             {
+                root.playerController = ControllerModule.CreatePlayerController("Player Controller");
                 SetState("Play");
             }
         }
@@ -36,12 +34,13 @@ namespace BSH
                 _characterSystem = System<CharacterSystem>.StartSystem();
                 _cameraSystem = System<CameraSystem>.StartSystem();
                 
-                Debug.Log(_characterSystem);
-                Debug.Log(_cameraSystem);
+                
+                Debug.Log(root.playerController);
                 
                 //Create Player
                 //_player = _characterSystem.CreateCharacter("Player");
                 //_characterSystem._player = _player;
+                root.playerController.Possess(_characterSystem.GetObjectFromData("Player"));
             }
             
             public override void Exit()

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028328, g: 0.22571328, b: 0.3069218, a: 1}
+  m_IndirectSpecularColor: {r: 0.11864554, g: 0.121823326, b: 0.1043899, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62aaa0f53d434b6f8dfab8ab55a544ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  definition: {fileID: 0}
+  definition: {fileID: 11400000, guid: 0dfaabf2372905b149c6e110fdc02dad, type: 2}
   prefab: {fileID: 0}
   instanced: 0
   UID: 0
@@ -161,8 +161,6 @@ MonoBehaviour:
   Components:
     items:
     - key: {fileID: 1044653842}
-      value: {fileID: 1291037596}
-    - key: {fileID: 0}
       value: {fileID: 1291037596}
   CustomEvents:
     items: []
@@ -387,14 +385,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 410087039}
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_LocalRotation: {x: -0.007720213, y: 0.41006744, z: 0.0034712201, w: 0.912016}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: -0.97, y: 48.42, z: 0}
 --- !u!114 &410087042
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -495,10 +493,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Data: {fileID: 1291037596}
+  inputByte: 0
+  isPossessed: 0
+  Controller: {fileID: 0}
+  InputsToMethodsMap:
+    items: []
   system: {fileID: 0}
   _characterController: {fileID: 0}
   movingState: 0
-  velocity: {x: 0, y: 0}
+  velocity: {x: 0, y: 0, z: 0}
 --- !u!143 &1044653843
 CharacterController:
   m_ObjectHideFlags: 0
@@ -654,7 +657,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1685761429}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.86858, y: -1.693, z: 0.9617944}
+  m_LocalPosition: {x: 0.86858, y: -1, z: 0.9617944}
   m_LocalScale: {x: 24.785862, y: 0.097573, z: 4.8114614}
   m_ConstrainProportionsScale: 0
   m_Children: []
