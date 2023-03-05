@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using UDT.Attributes;
 using UDT.Core;
 using UDT.Core.Controllables;
 using UDT.Data;
@@ -48,7 +47,7 @@ namespace BSH.Characters
             //Set the Moving State based on the grounded state
             if (grounded)
             {
-                if (movingState == MovingState.Falling || movingState == MovingState.Jumping)
+                if (movingState == MovingState.Falling)
                 {
                     OnLand();
                 }
@@ -64,30 +63,43 @@ namespace BSH.Characters
             //Apply Jump Curve
             if(movingState == MovingState.Jumping) velocity.y = Data.JumpCurve.Evaluate(jumpTime) * Data.jumpStrength;
             jumpTime += Time.deltaTime;
+            if (jumpTime > Data.JumpCurve.keys[^1].time) movingState = MovingState.Falling;
             
             //Apply Gravity
-            if (enableGravity && !grounded) velocity += Physics.gravity;
-            else velocity.y = 0;
+            if (enableGravity && !grounded) velocity += Physics.gravity/60;
+            else if(movingState != MovingState.Jumping) velocity.y = 0;
             
             //Move the Character
             _characterController.Move(velocity * Time.deltaTime);
         }
 
-        [InputMethod("OnMove")]
+        public override void OnInputAction(InputAction.CallbackContext context)
+        {
+            if (context.action.name == "Move")
+            {
+                OnMove(context);
+            }
+            else if (context.action.name == "Jump")
+            {
+                OnJump(context);
+            }
+        }
+
         public virtual void OnMove(InputAction.CallbackContext context)
         {
             Vector2 input = context.ReadValue<Vector2>();
             velocity.x = input.x * Data.groundSpeed;
         }
         
-        [InputMethod("OnJump")]
         public virtual void OnJump(InputAction.CallbackContext context)
         {
-            if(grounded && context.ReadValue<bool>() && movingState != MovingState.Jumping)
+            if (grounded && movingState != MovingState.Jumping)
+            {
+                jumpTime = 0;
                 movingState = MovingState.Jumping;
+            }
         }
 
-        [InputMethod("OnLand")]
         public virtual void OnLand()
         {
             if(movingState == MovingState.Jumping || movingState == MovingState.Falling)
