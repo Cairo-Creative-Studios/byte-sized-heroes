@@ -15,6 +15,10 @@ namespace BSH.Characters
         [Header(" - Speed - ")]
         [Tooltip("The Speed of the Character when on the Ground")]
         public float groundSpeed = 5f;
+        public float groundAcceleration = 10f;
+        public float groundDeceleration = 10f;
+        public AnimationCurve accelerationCurve;
+        public AnimationCurve decelerationCurve;
         [Tooltip("Multiplier the GroundSpeed when the Character is Sprinting")]
         public float sprintMultiplier = 2f;
         [Tooltip("Multiplier to the GroundSpeed when the Character is in the Air")]
@@ -28,6 +32,8 @@ namespace BSH.Characters
         public AnimationCurve JumpCurve;
         [Tooltip("Multiplier to movement speed, that pushes the player forward on Jump")]
         public float onJumpSpeedBoost = 1.2f;
+
+        public float JumpSustainWeight = 0.1f;
         
         //Orientation
         public enum OrientationType

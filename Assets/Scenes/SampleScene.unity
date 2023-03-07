@@ -164,6 +164,12 @@ MonoBehaviour:
       value: {fileID: 1291037596}
   CustomEvents:
     items: []
+  controllerValues:
+    InputByte: 0
+    IsPossessed: 0
+    Controller: {fileID: 0}
+    Controllables:
+    - {fileID: 1044653842}
 --- !u!4 &279236766
 Transform:
   m_ObjectHideFlags: 0
@@ -492,12 +498,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9658a51a347c4d48b4dd007a0eb56cd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Data: {fileID: 1291037596}
-  inputByte: 0
-  isPossessed: 0
-  Controller: {fileID: 0}
-  InputsToMethodsMap:
-    items: []
+  Data: {fileID: 11400000, guid: 5a949301bacd973fe9b85eddf8ca7578, type: 2}
   system: {fileID: 0}
   _characterController: {fileID: 0}
   movingState: 0
@@ -561,6 +562,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   onJumpSpeedBoost: 1.2
+  JumpSustainWeight: 0.1
   orientationType: 0
   alignmentSpeed: 1
   minimumMovementSpeedForAlignment: 0

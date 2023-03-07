@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using UDT.Core;
 using UDT.Core.Controllables;
@@ -8,11 +9,8 @@ using UnityEngine.InputSystem;
 namespace BSH.Characters
 {
     [RequireComponent(typeof(CharacterController))]
-    public class CharacterControllerComponent : ControllableComponent<CharacterControllerData, CharacterSystem>, IFSM
+    public class CharacterControllerComponent : StandardComponent<CharacterControllerData, CharacterSystem>, IControllable
     {
-        //Inherited from IFSM
-        public Tree<IStateNode> states { get; set; }
-        
         //Values of the Character Controller
         [ReadOnly(true)] public CharacterController _characterController;
         
@@ -22,20 +20,19 @@ namespace BSH.Characters
         }
         [ReadOnly(true)] public MovingState movingState;
         public Vector3 velocity;
-        
+
         private float jumpTime;
+        private bool jumpPressed;
+        private bool movePressed;
         private bool grounded;
+        private float horizontalMovementInput;
+        private Vector2 movementInput;
         bool enableGravity = true;
 
         public override void OnInstantiate()
         {
             base.OnInstantiate();
-            InitMachine();
             _characterController = GetComponent<CharacterController>();
-        }
-        public void InitMachine()
-        {
-            StateMachineModule.AddStateMachine(this);
         }
         
         void Update()
@@ -49,7 +46,7 @@ namespace BSH.Characters
             {
                 if (movingState == MovingState.Falling)
                 {
-                    OnLand();
+                    movingState = MovingState.Idle;
                 }
             }
             else
@@ -62,12 +59,30 @@ namespace BSH.Characters
             
             //Apply Jump Curve
             if(movingState == MovingState.Jumping) velocity.y = Data.JumpCurve.Evaluate(jumpTime) * Data.jumpStrength;
-            jumpTime += Time.deltaTime;
-            if (jumpTime > Data.JumpCurve.keys[^1].time) movingState = MovingState.Falling;
+            if (jumpPressed)
+                jumpTime += Time.deltaTime;
+            else
+                jumpTime += Time.deltaTime + Time.deltaTime * Data.JumpSustainWeight;
+            
+            if (jumpTime > Data.JumpCurve.keys[^1].time && movingState == MovingState.Jumping) movingState = MovingState.Falling;
             
             //Apply Gravity
             if (enableGravity && !grounded) velocity += Physics.gravity/60;
             else if(movingState != MovingState.Jumping) velocity.y = 0;
+
+            if (!movePressed)
+            {
+                horizontalMovementInput = Mathf.Lerp(horizontalMovementInput,0,Data.groundDeceleration * Time.deltaTime);
+                velocity.x = Data.decelerationCurve.Evaluate(Mathf.Abs(horizontalMovementInput)) * horizontalMovementInput * Data.groundSpeed;
+            }
+            else
+            {
+                horizontalMovementInput = Mathf.Lerp(horizontalMovementInput, movementInput.x, Data.groundAcceleration * Time.deltaTime);
+                
+                var velocityX = Data.accelerationCurve.Evaluate(Mathf.Abs(horizontalMovementInput)) * horizontalMovementInput * Data.groundSpeed;
+                if(Mathf.Abs(velocity.x) < Mathf.Abs(velocityX) || Mathf.Sign(velocity.x) != Mathf.Sign(velocityX)) velocity.x = velocityX;
+            }
+
             
             //Move the Character
             _characterController.Move(velocity * Time.deltaTime);
@@ -88,30 +103,28 @@ namespace BSH.Characters
         public virtual void OnMove(InputAction.CallbackContext context)
         {
             Vector2 input = context.ReadValue<Vector2>();
-            velocity.x = input.x * Data.groundSpeed;
+            this.movementInput = input;
+            
+            if(context.performed) movePressed = true;
+            else if(context.canceled) movePressed = false;
         }
         
         public virtual void OnJump(InputAction.CallbackContext context)
         {
-            if (grounded && movingState != MovingState.Jumping)
+            if (context.performed)
             {
-                jumpTime = 0;
-                movingState = MovingState.Jumping;
+                jumpPressed = true;
+                if (grounded)
+                {
+                    jumpTime = 0;
+                    movingState = MovingState.Jumping;
+                    
+                    velocity.x *= Data.onJumpSpeedBoost;
+                }
             }
-        }
-
-        public virtual void OnLand()
-        {
-            if(movingState == MovingState.Jumping || movingState == MovingState.Falling)
-                movingState = MovingState.Idle;
-        }
-
-        public virtual void LandCheck()
-        {
-            var hit = Physics.Raycast(transform.position, Vector3.down, out var hitInfo, 1f);
-            if (hit && hitInfo.collider.gameObject.layer == 8)
+            else if (context.canceled)
             {
-                OnLand();
+                jumpPressed = false;
             }
         }
     }
